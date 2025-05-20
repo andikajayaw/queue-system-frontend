@@ -92,7 +92,7 @@ const { isMobile, state, toggleSidebar } = useSidebar();
                           <NuxtLink
                             :to="subItem.url"
                             class="flex items-center gap-2"
-                            @click="toggleSidebar()"
+                            @click="isMobile && toggleSidebar()"
                           >
                             <Icon v-if="subItem.icon" :name="subItem.icon" />
                             <span>{{ subItem.title }}</span>
@@ -113,7 +113,7 @@ const { isMobile, state, toggleSidebar } = useSidebar();
                 <NuxtLink
                   :to="item.url"
                   class="flex items-center gap-2"
-                  @click="toggleSidebar()"
+                  @click="isMobile && toggleSidebar()"
                 >
                   <Icon v-if="item.icon" :name="item.icon" />
                   <span>{{ item.title }}</span>
@@ -151,7 +151,7 @@ const { isMobile, state, toggleSidebar } = useSidebar();
                       <NuxtLink
                         :to="subItem.url"
                         class="flex items-center gap-2"
-                        @click="toggleSidebar()"
+                        @click="isMobile && toggleSidebar()"
                       >
                         <Icon v-if="subItem.icon" :name="subItem.icon" />
 
