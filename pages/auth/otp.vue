@@ -7,6 +7,7 @@ import {
 
 definePageMeta({
   alias: "/otp",
+  layout: false,
 });
 
 const value = ref<string[]>([]);

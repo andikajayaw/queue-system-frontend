@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   alias: "/sign-up",
+  layout: false,
 });
 </script>
 
@@ -49,7 +50,7 @@ definePageMeta({
         </div>
         <div class="mt-4 text-center text-sm">
           Already have an account?
-          <a href="#" class="underline"> Sign in </a>
+          <NuxtLink to="#" class="underline"> Sign in </NuxtLink>
         </div>
       </CardContent>
     </Card>

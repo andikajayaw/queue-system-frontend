@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { useColorMode } from "@vueuse/core";
 
-useColorMode();
+const { state } = useColorMode();
+
+const loadingColor = computed(() =>
+  state.value === "light" ? "#6B7280" : "#D1D5DB"
+);
 </script>
+
 <template>
-  <NuxtLoadingIndicator />
+  <ClientOnly>
+    <NuxtLoadingIndicator :color="loadingColor" />
+  </ClientOnly>
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>

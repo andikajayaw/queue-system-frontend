@@ -47,124 +47,132 @@ const props = withDefaults(defineProps<SidebarProps>(), {
 
 // This is sample data.
 
-const { isMobile, state } = useSidebar();
+const { isMobile, state, toggleSidebar } = useSidebar();
 </script>
 
 <template>
-  <Sidebar v-bind="props">
-    <SidebarHeader>
-      <TeamSwitcher :teams="data.teams" />
-    </SidebarHeader>
-    <SidebarContent>
-      <SidebarGroup v-for="group in sidebar_groups" :key="group.label">
-        <SidebarGroupLabel>{{ group.label }}</SidebarGroupLabel>
-        <SidebarMenu v-if="state == 'expanded'">
-          <Transition v-for="item in group.links" :key="item.title">
-            <Collapsible
-              as-child
-              :default-open="item.isActive"
-              class="group/collapsible"
-            >
-              <SidebarMenuItem>
-                <CollapsibleTrigger as-child>
+  <ClientOnly>
+    <Sidebar v-bind="props">
+      <SidebarHeader>
+        <TeamSwitcher :teams="data.teams" />
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarGroup v-for="group in sidebar_groups" :key="group.label">
+          <SidebarGroupLabel>{{ group.label }}</SidebarGroupLabel>
+          <SidebarMenu v-if="state == 'expanded'">
+            <template v-for="item in group.links" :key="item.title">
+              <Collapsible
+                v-if="item.items"
+                as-child
+                :default-open="item.isActive"
+                class="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger as-child>
+                    <SidebarMenuButton
+                      class="cursor-pointer"
+                      :tooltip="item.title"
+                    >
+                      <Icon v-if="item.icon" :name="item.icon" />
+
+                      <span>{{ item.title }}</span>
+                      <ChevronRight
+                        class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                      />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      <SidebarMenuSubItem
+                        v-for="subItem in item.items"
+                        :key="subItem.title"
+                      >
+                        <SidebarMenuSubButton as-child>
+                          <NuxtLink
+                            :to="subItem.url"
+                            class="flex items-center gap-2"
+                            @click="toggleSidebar()"
+                          >
+                            <Icon v-if="subItem.icon" :name="subItem.icon" />
+                            <span>{{ subItem.title }}</span>
+                          </NuxtLink>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
+
+              <SidebarMenuButton
+                v-else
+                as-child
+                class="cursor-pointer"
+                :tooltip="item.title"
+              >
+                <NuxtLink
+                  :to="item.url"
+                  class="flex items-center gap-2"
+                  @click="toggleSidebar()"
+                >
+                  <Icon v-if="item.icon" :name="item.icon" />
+                  <span>{{ item.title }}</span>
+                </NuxtLink>
+              </SidebarMenuButton>
+            </template>
+          </SidebarMenu>
+
+          <SidebarMenu v-else>
+            <SidebarMenuItem>
+              <DropdownMenu v-for="item in group.links" :key="item.title">
+                <DropdownMenuTrigger as-child>
                   <SidebarMenuButton
                     class="cursor-pointer"
                     :tooltip="item.title"
                   >
                     <Icon v-if="item.icon" :name="item.icon" />
-
-                    <span>{{ item.title }}</span>
-                    <ChevronRight
-                      class="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
-                    />
                   </SidebarMenuButton>
-                </CollapsibleTrigger>
-
-                <CollapsibleContent>
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem
-                      v-for="subItem in item.items"
-                      :key="subItem.title"
-                    >
-                      <SidebarMenuSubButton as-child>
-                        <a :href="subItem.url" class="flex items-center gap-2">
-                          <Icon v-if="subItem.icon" :name="subItem.icon" />
-                          <span>{{ subItem.title }}</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                </CollapsibleContent>
-              </SidebarMenuItem>
-            </Collapsible>
-          </Transition>
-        </SidebarMenu>
-
-        <SidebarMenu v-else>
-          <SidebarMenuItem>
-            <DropdownMenu v-for="item in group.links" :key="item.title">
-              <DropdownMenuTrigger as-child>
-                <SidebarMenuButton class="cursor-pointer" :tooltip="item.title">
-                  <Icon v-if="item.icon" :name="item.icon" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                class="w-[--reka-dropdown-menu-trigger-width] rounded-lg"
-                :side="isMobile ? 'bottom' : 'right'"
-                align="start"
-                :side-offset="4"
-              >
-                <DropdownMenuLabel>
-                  {{ item.title }}
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup
-                  v-for="subItem in item.items"
-                  :key="subItem.title"
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  class="w-[--reka-dropdown-menu-trigger-width] rounded-lg"
+                  :side="isMobile ? 'bottom' : 'right'"
+                  align="start"
+                  :side-offset="4"
                 >
-                  <DropdownMenuItem>
-                    <a :href="subItem.url" class="flex items-center gap-2">
-                      <Icon v-if="subItem.icon" :name="subItem.icon" />
+                  <DropdownMenuLabel>
+                    {{ item.title }}
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup
+                    v-for="subItem in item.items"
+                    :key="subItem.title"
+                  >
+                    <DropdownMenuItem>
+                      <NuxtLink
+                        :to="subItem.url"
+                        class="flex items-center gap-2"
+                        @click="toggleSidebar()"
+                      >
+                        <Icon v-if="subItem.icon" :name="subItem.icon" />
 
-                      {{ subItem.title }}
-                    </a>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-    </SidebarContent>
-    <SidebarFooter>
-      <SidebarMenu>
-        <SidebarMenuItem>
-          <DropdownMenu>
-            <DropdownMenuTrigger as-child>
-              <SidebarMenuButton
-                size="lg"
-                class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-              >
-                <Avatar class="h-8 w-8 rounded-lg">
-                  <AvatarImage :src="data.user.avatar" :alt="data.user.name" />
-                  <AvatarFallback class="rounded-lg"> MD </AvatarFallback>
-                </Avatar>
-                <div class="grid flex-1 text-left text-sm leading-tight">
-                  <span class="truncate font-medium">{{ data.user.name }}</span>
-                  <span class="truncate text-xs">{{ data.user.email }}</span>
-                </div>
-                <ChevronsUpDown class="ml-auto size-4" />
-              </SidebarMenuButton>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-              :side="isMobile ? 'bottom' : 'right'"
-              align="end"
-              :side-offset="4"
-            >
-              <DropdownMenuLabel class="p-0 font-normal">
-                <div
-                  class="flex items-center gap-2 px-1 py-1.5 text-left text-sm"
+                        {{ subItem.title }}
+                      </NuxtLink>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger as-child>
+                <SidebarMenuButton
+                  size="lg"
+                  class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar class="h-8 w-8 rounded-lg">
                     <AvatarImage
@@ -174,45 +182,74 @@ const { isMobile, state } = useSidebar();
                     <AvatarFallback class="rounded-lg"> MD </AvatarFallback>
                   </Avatar>
                   <div class="grid flex-1 text-left text-sm leading-tight">
-                    <span class="truncate font-semibold">{{
+                    <span class="truncate font-medium">{{
                       data.user.name
                     }}</span>
                     <span class="truncate text-xs">{{ data.user.email }}</span>
                   </div>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
+                  <ChevronsUpDown class="ml-auto size-4" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                class="w-[--reka-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+                :side="isMobile ? 'bottom' : 'right'"
+                align="end"
+                :side-offset="4"
+              >
+                <DropdownMenuLabel class="p-0 font-normal">
+                  <div
+                    class="flex items-center gap-2 px-1 py-1.5 text-left text-sm"
+                  >
+                    <Avatar class="h-8 w-8 rounded-lg">
+                      <AvatarImage
+                        :src="data.user.avatar"
+                        :alt="data.user.name"
+                      />
+                      <AvatarFallback class="rounded-lg"> MD </AvatarFallback>
+                    </Avatar>
+                    <div class="grid flex-1 text-left text-sm leading-tight">
+                      <span class="truncate font-semibold">{{
+                        data.user.name
+                      }}</span>
+                      <span class="truncate text-xs">{{
+                        data.user.email
+                      }}</span>
+                    </div>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <Sparkles />
+                    Upgrade to Pro
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <BadgeCheck />
+                    Account
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <CreditCard />
+                    Billing
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Bell />
+                    Notifications
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Sparkles />
-                  Upgrade to Pro
+                  <LogOut />
+                  Log out
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <BadgeCheck />
-                  Account
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CreditCard />
-                  Billing
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Bell />
-                  Notifications
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </SidebarMenuItem>
-      </SidebarMenu>
-    </SidebarFooter>
-    <SidebarRail />
-  </Sidebar>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
+  </ClientOnly>
 </template>

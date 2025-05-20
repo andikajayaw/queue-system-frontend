@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   alias: "/503",
+  layout: false,
 });
 </script>
 

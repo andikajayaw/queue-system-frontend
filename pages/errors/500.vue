@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   alias: "/500",
+  layout: false,
 });
 const router = useRouter();
 </script>

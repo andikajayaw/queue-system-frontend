@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   alias: "/sign-in-2",
+  layout: false,
 });
 </script>
 
@@ -8,14 +9,14 @@ definePageMeta({
   <div class="grid min-h-svh lg:grid-cols-2">
     <div class="flex flex-col gap-4 p-6 md:p-10">
       <div class="flex justify-center gap-2 md:justify-start">
-        <a href="#" class="flex items-center gap-2 font-medium">
+        <NuxtLink to="#" class="flex items-center gap-2 font-medium">
           <div
             class="flex overflow-hidden h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground"
           >
             <NuxtImg src="/avatar.jpeg" />
           </div>
           Dashboard
-        </a>
+        </NuxtLink>
       </div>
       <div class="flex flex-1 items-center justify-center">
         <div class="w-full max-w-xs">
@@ -39,12 +40,12 @@ definePageMeta({
               <div class="grid gap-2">
                 <div class="flex items-center">
                   <Label for="password">Password</Label>
-                  <a
-                    href="#"
+                  <NuxtLink
+                    to="#"
                     class="ml-auto text-sm underline-offset-4 hover:underline"
                   >
                     Forgot your password?
-                  </a>
+                  </NuxtLink>
                 </div>
                 <Input id="password" type="password" required />
               </div>
@@ -76,7 +77,9 @@ definePageMeta({
             </div>
             <div class="text-center text-sm">
               Don't have an account?
-              <a href="#" class="underline underline-offset-4"> Sign up </a>
+              <NuxtLink to="#" class="underline underline-offset-4">
+                Sign up
+              </NuxtLink>
             </div>
           </form>
         </div>

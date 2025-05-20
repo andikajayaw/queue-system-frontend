@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   alias: "/sign-in-1",
+  layout: false,
 });
 </script>
 
@@ -27,9 +28,9 @@ definePageMeta({
           <div class="grid gap-2">
             <div class="flex items-center">
               <Label for="password">Password</Label>
-              <a href="#" class="ml-auto inline-block text-sm underline">
+              <NuxtLink to="#" class="ml-auto inline-block text-sm underline">
                 Forgot your password?
-              </a>
+              </NuxtLink>
             </div>
             <Input id="password" type="password" required />
           </div>
@@ -38,7 +39,7 @@ definePageMeta({
         </div>
         <div class="mt-4 text-center text-sm">
           Don't have an account?
-          <a href="#" class="underline"> Sign up </a>
+          <NuxtLink to="#" class="underline"> Sign up </NuxtLink>
         </div>
       </CardContent>
     </Card>

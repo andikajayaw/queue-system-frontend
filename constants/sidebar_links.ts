@@ -7,12 +7,12 @@ type SidebarSubItem = {
 type SidebarLink = {
   title: string;
   url: string;
-  icon?: string; // ou algo como typeof IconComponent se estiver usando lucide-react/vue
+  icon?: string;
   isActive?: boolean;
   items?: SidebarSubItem[];
 };
 
-type SidebarGroup = {
+export type SidebarGroup = {
   label: string;
   links?: SidebarLink[];
 };
@@ -22,24 +22,14 @@ const sidebar_groups: SidebarGroup[] = [
     label: "Geral",
     links: [
       {
-        title: "Playground",
-        url: "#",
-        icon: "tabler:terminal-2",
-        isActive: false,
-        items: [
-          {
-            title: "History",
-            url: "#",
-          },
-          {
-            title: "Starred",
-            url: "#",
-          },
-          {
-            title: "Settings",
-            url: "#",
-          },
-        ],
+        title: "Dashboard",
+        url: "/",
+        icon: "hugeicons:dashboard-square-01",
+      },
+      {
+        title: "Apps",
+        url: "/apps",
+        icon: "hugeicons:package",
       },
     ],
   },
@@ -50,7 +40,7 @@ const sidebar_groups: SidebarGroup[] = [
       {
         title: "Auth",
         url: "#",
-        icon: "tabler:lock-access",
+        icon: "hugeicons:locked",
         isActive: false,
         items: [
           {
@@ -78,7 +68,7 @@ const sidebar_groups: SidebarGroup[] = [
       {
         title: "Errors",
         url: "#",
-        icon: "tabler:bug",
+        icon: "hugeicons:bug-01",
         isActive: false,
         items: [
           {

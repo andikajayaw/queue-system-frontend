@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   alias: "/forgot-password",
+  layout: false,
 });
 </script>
 
