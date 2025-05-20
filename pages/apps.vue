@@ -16,7 +16,7 @@ import { apps } from "~/constants/apps";
       <Card
         v-for="(app, index) in apps"
         :key="index"
-        class="shadow-none hover:shadow-sm transition-all"
+        class="shadow-none hover:shadow-sm dark:shadow-slate-700 transition-all"
       >
         <CardHeader>
           <div class="w-full flex justify-between items-center">
