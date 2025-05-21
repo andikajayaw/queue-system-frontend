@@ -123,44 +123,59 @@ const { isMobile, state, toggleSidebar } = useSidebar();
           </SidebarMenu>
 
           <SidebarMenu v-else>
-            <SidebarMenuItem>
-              <DropdownMenu v-for="item in group.links" :key="item.title">
-                <DropdownMenuTrigger as-child>
+            <SidebarMenuItem as-child>
+              <template v-for="item in group.links" :key="item.title">
+                <DropdownMenu v-if="item.items">
+                  <DropdownMenuTrigger as-child>
+                    <SidebarMenuButton
+                      class="cursor-pointer"
+                      :tooltip="item.title"
+                    >
+                      <Icon v-if="item.icon" :name="item.icon" />
+                    </SidebarMenuButton>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    class="w-[--reka-dropdown-menu-trigger-width] rounded-lg"
+                    :side="isMobile ? 'bottom' : 'right'"
+                    align="start"
+                    :side-offset="4"
+                  >
+                    <DropdownMenuLabel>
+                      {{ item.title }}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup
+                      v-for="subItem in item.items"
+                      :key="subItem.title"
+                    >
+                      <DropdownMenuItem>
+                        <NuxtLink
+                          :to="subItem.url"
+                          class="flex items-center gap-2"
+                          @click="isMobile && toggleSidebar()"
+                        >
+                          <Icon v-if="subItem.icon" :name="subItem.icon" />
+
+                          {{ subItem.title }}
+                        </NuxtLink>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <NuxtLink
+                  v-else
+                  :to="item.url"
+                  @click="isMobile && toggleSidebar()"
+                >
                   <SidebarMenuButton
                     class="cursor-pointer"
                     :tooltip="item.title"
                   >
                     <Icon v-if="item.icon" :name="item.icon" />
                   </SidebarMenuButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  class="w-[--reka-dropdown-menu-trigger-width] rounded-lg"
-                  :side="isMobile ? 'bottom' : 'right'"
-                  align="start"
-                  :side-offset="4"
-                >
-                  <DropdownMenuLabel>
-                    {{ item.title }}
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuGroup
-                    v-for="subItem in item.items"
-                    :key="subItem.title"
-                  >
-                    <DropdownMenuItem>
-                      <NuxtLink
-                        :to="subItem.url"
-                        class="flex items-center gap-2"
-                        @click="isMobile && toggleSidebar()"
-                      >
-                        <Icon v-if="subItem.icon" :name="subItem.icon" />
-
-                        {{ subItem.title }}
-                      </NuxtLink>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </NuxtLink>
+              </template>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
