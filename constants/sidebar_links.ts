@@ -31,6 +31,11 @@ const sidebar_groups: SidebarGroup[] = [
         url: "/apps",
         icon: "hugeicons:package",
       },
+      {
+        title: "Tasks",
+        url: "/tasks",
+        icon: "hugeicons:blockchain-06",
+      },
     ],
   },
   {

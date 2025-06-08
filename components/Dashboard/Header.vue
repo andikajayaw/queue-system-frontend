@@ -19,7 +19,10 @@ const open = ref(false);
       />
       <div class="w-full flex items-center gap-4 justify-between">
         <SearchCommand :open :page-links="sidebar_groups" />
-        <ThemeToggle />
+        <div class="flex items-center gap-4">
+          <ThemeToggle />
+          <UserNav />
+        </div>
       </div>
     </div>
   </header>

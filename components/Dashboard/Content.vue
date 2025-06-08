@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cn } from "@/lib/utils";
+import { cn } from "~/lib/utils";
 import type { HTMLAttributes } from "vue";
 
 const props = defineProps<{
@@ -7,7 +7,10 @@ const props = defineProps<{
 }>();
 </script>
 <template>
-  <div :class="cn('flex-1 space-y-4 p-4 pt-6', props.class)" v-bind="$attrs">
+  <div
+    :class="cn('flex-1 space-y-4 w-full flex flex-col p-4 pt-6', props.class)"
+    v-bind="$attrs"
+  >
     <slot name="header" />
     <slot />
   </div>

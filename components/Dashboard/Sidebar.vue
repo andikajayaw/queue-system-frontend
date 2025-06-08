@@ -148,17 +148,18 @@ const { isMobile, state, toggleSidebar } = useSidebar();
                       v-for="subItem in item.items"
                       :key="subItem.title"
                     >
-                      <DropdownMenuItem>
-                        <NuxtLink
-                          :to="subItem.url"
-                          class="flex items-center gap-2"
-                          @click="isMobile && toggleSidebar()"
+                      <NuxtLink
+                        :to="subItem.url"
+                        @click="isMobile && toggleSidebar()"
+                      >
+                        <DropdownMenuItem
+                          class="flex cursor-pointer items-center gap-2"
                         >
                           <Icon v-if="subItem.icon" :name="subItem.icon" />
 
                           {{ subItem.title }}
-                        </NuxtLink>
-                      </DropdownMenuItem>
+                        </DropdownMenuItem>
+                      </NuxtLink>
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>

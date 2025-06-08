@@ -4,7 +4,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 <template>
   <SidebarProvider>
     <DashboardSidebar />
-    <SidebarInset>
+    <SidebarInset class="w-auto">
       <DashboardHeader />
 
       <slot />
