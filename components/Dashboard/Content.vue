@@ -8,7 +8,7 @@ const props = defineProps<{
 </script>
 <template>
   <div
-    :class="cn('flex-1 space-y-4 w-full flex flex-col p-4 pt-6', props.class)"
+    :class="cn(' grid grid-cols-1  space-y-4 w-auto  p-4 pt-6', props.class)"
     v-bind="$attrs"
   >
     <slot name="header" />

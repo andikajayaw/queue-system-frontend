@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import type { Column } from "@tanstack/vue-table";
-import type { Component } from "vue";
 import { computed } from "vue";
 import type { Task } from "~/features/tasks/data/schema";
-
-import { cn } from "~/lib/utils";
 
 interface DataTableFacetedFilter {
   column?: Column<Task, unknown>;
@@ -12,7 +9,7 @@ interface DataTableFacetedFilter {
   options: {
     label: string;
     value: string;
-    icon?: Component;
+    icon?: string;
   }[];
 }
 
@@ -75,7 +72,6 @@ const selectedValues = computed(
               :value="option"
               @select="
                 (e) => {
-                  console.log(e.detail.value);
                   const isSelected = selectedValues.has(option.value);
                   if (isSelected) {
                     selectedValues.delete(option.value);
@@ -89,24 +85,14 @@ const selectedValues = computed(
                 }
               "
             >
-              <div
-                :class="
-                  cn(
-                    'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-                    selectedValues.has(option.value)
-                      ? 'bg-primary text-primary-foreground'
-                      : 'opacity-50 [&_svg]:invisible'
-                  )
-                "
-              >
-                <Icon
-                  name="hugeicons:checkmark-circle-01"
-                  :class="cn('h-4 w-4')"
-                />
-              </div>
-              <component
-                :is="option.icon"
+              <Checkbox
+                :default-value="selectedValues.has(option.value)"
+                :value="selectedValues"
+                class="border-primary/50"
+              />
+              <Icon
                 v-if="option.icon"
+                :name="option.icon"
                 class="mr-2 h-4 w-4 text-muted-foreground"
               />
               <span>{{ option.label }}</span>

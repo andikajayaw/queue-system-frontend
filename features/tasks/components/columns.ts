@@ -1,90 +1,39 @@
 import type { ColumnDef } from "@tanstack/vue-table";
 import type { Task } from "../data/schema";
 
-import { h } from "vue";
+export type ColumnDefProps = ColumnDef<Task> & {
+  enableAllPageRowsSelected?: boolean;
+  enableRowSelection?: boolean;
+};
 
-import { priorities, statuses } from "../data/data";
-
-import { Checkbox } from "~/components/ui/checkbox";
-import { DataTableColumnHeader } from "~/components/ui/data-table";
-
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDefProps[] = [
   {
     id: "select",
-    header: ({ table }) =>
-      h(Checkbox, {
-        modelValue:
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate"),
-        "onUpdate:modelValue": (value) =>
-          table.toggleAllPageRowsSelected(!!value),
-        ariaLabel: "Select all",
-        class: "translate-y-0.5",
-      }),
-    cell: ({ row }) =>
-      h(Checkbox, {
-        modelValue: row.getIsSelected(),
-        "onUpdate:modelValue": (value) => row.toggleSelected(!!value),
-        ariaLabel: "Select row",
-        class: "translate-y-0.5",
-      }),
     enableSorting: false,
     enableHiding: false,
+    enableAllPageRowsSelected: true,
+    enableRowSelection: true,
   },
   {
     accessorKey: "id",
-    header: ({ column }) => h(DataTableColumnHeader, { column, title: "Task" }),
-    cell: ({ row }) => h("div", { class: "w-20" }, row.getValue("id")),
-    enableSorting: false,
+    meta: { title: "ID" },
+    enableSorting: true,
     enableHiding: false,
   },
   {
     accessorKey: "title",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Title" }),
+    meta: { title: "Title" },
+    enableSorting: true,
   },
   {
     accessorKey: "status",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Status" }),
-
-    cell: ({ row }) => {
-      const status = statuses.find(
-        (status) => status.value === row.getValue("status")
-      );
-
-      if (!status) return null;
-
-      return h("div", { class: "flex w-[100px] items-center" }, [
-        status.icon &&
-          h(status.icon, { class: "mr-2 h-4 w-4 text-muted-foreground" }),
-        h("span", status.label),
-      ]);
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    meta: { title: "Status" },
+    enableSorting: true,
   },
   {
     accessorKey: "priority",
-    header: ({ column }) =>
-      h(DataTableColumnHeader, { column, title: "Priority" }),
-    cell: ({ row }) => {
-      const priority = priorities.find(
-        (priority) => priority.value === row.getValue("priority")
-      );
-
-      if (!priority) return null;
-
-      return h("div", { class: "flex items-center" }, [
-        priority.icon &&
-          h(priority.icon, { class: "mr-2 h-4 w-4 text-muted-foreground" }),
-        h("span", {}, priority.label),
-      ]);
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    meta: { title: "Priority" },
+    enableSorting: true,
   },
   {
     id: "actions",

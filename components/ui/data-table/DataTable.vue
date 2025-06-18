@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -19,11 +18,12 @@ import {
 // import { ref, useSlots, type SetupContext } from "vue";
 import { valueUpdater } from "~/lib/utils";
 
-import DataTablePagination from "./DataTablePagination.vue";
+import DataTablePagination from "../../../features/tasks/components/DataTablePagination.vue";
 import type { Task } from "~/features/tasks/data/schema";
+import type { ColumnDefProps } from "~/features/tasks/components/columns";
 
 interface DataTableProps {
-  columns: ColumnDef<Task, unknown>[];
+  columns: ColumnDefProps[];
   data: Task[];
 }
 const props = defineProps<DataTableProps>();
@@ -76,6 +76,7 @@ const table = useVueTable({
 <template>
   <div class="space-y-4">
     <slot name="toolbar" v-bind="{ table }" />
+
     <div class="rounded-md border">
       <Table>
         <TableHeader>
@@ -84,14 +85,90 @@ const table = useVueTable({
             :key="headerGroup.id"
           >
             <TableHead v-for="header in headerGroup.headers" :key="header.id">
-              <FlexRender
-                v-if="!header.isPlaceholder"
-                :render="header.column.columnDef.header"
-                :props="header.getContext()"
-              />
+              <!-- Checkbox de seleção de todas as linhas -->
+              <template
+                v-if="header.column.columnDef.enableAllPageRowsSelected"
+              >
+                <Checkbox
+                  :model-value="
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && 'indeterminate')
+                  "
+                  aria-label="Select all"
+                  class="translate-y-0.5 mx-1"
+                  @update:model-value="
+                    (value) => table.toggleAllPageRowsSelected(!!value)
+                  "
+                />
+              </template>
+
+              <!-- Header com ordenação -->
+              <template
+                v-else-if="
+                  !header.isPlaceholder && header.column.columnDef.enableSorting
+                "
+              >
+                <div class="flex items-center space-x-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger as-child>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        class="-ml-3 h-8 data-[state=open]:bg-accent"
+                      >
+                        <span>{{ header.column.columnDef.meta?.title }}</span>
+                        <Icon
+                          v-if="header.column.getIsSorted() === 'desc'"
+                          name="hugeicons:arrow-down-01"
+                          class="ml-2 h-4 w-4"
+                        />
+                        <Icon
+                          v-else-if="header.column.getIsSorted() === 'asc'"
+                          name="hugeicons:arrow-up-01"
+                          class="ml-2 h-4 w-4"
+                        />
+                        <Icon
+                          v-else
+                          name="radix-icons:caret-sort"
+                          class="ml-2 h-4 w-4"
+                        />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start">
+                      <DropdownMenuItem
+                        @click="header.column.toggleSorting(false)"
+                      >
+                        <Icon
+                          name="hugeicons:arrow-up-01"
+                          class="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
+                        />
+                        Asc
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        @click="header.column.toggleSorting(true)"
+                      >
+                        <Icon
+                          name="hugeicons:arrow-down-01"
+                          class="mr-2 h-3.5 w-3.5 text-muted-foreground/70"
+                        />
+                        Desc
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </template>
+
+              <!-- Header customizado (fallback) -->
+              <template v-else-if="!header.isPlaceholder">
+                <FlexRender
+                  :render="header.column.columnDef.header"
+                  :props="header.getContext()"
+                />
+              </template>
             </TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
           <template v-if="table.getRowModel().rows?.length">
             <TableRow
@@ -100,25 +177,41 @@ const table = useVueTable({
               :data-state="row.getIsSelected() && 'selected'"
             >
               <TableCell v-for="cell in row.getVisibleCells()" :key="cell.id">
-                <!-- Verifica se há um slot customizado -->
-                <slot
-                  :name="`${cell.column.id}-data`"
-                  v-bind="{ row: row.original }"
-                >
-                  <!-- Fallback -->
-                  <FlexRender
-                    :render="cell.column.columnDef.cell"
-                    :props="cell.getContext()"
+                <!-- Checkbox por linha -->
+                <template v-if="cell.column.columnDef.enableRowSelection">
+                  <Checkbox
+                    :model-value="row.getIsSelected()"
+                    aria-label="Select row"
+                    class="translate-y-0.5 mx-1"
+                    @update:model-value="(value) => row.toggleSelected(!!value)"
                   />
-                </slot>
+                </template>
+
+                <!-- Slot customizado -->
+                <template v-else>
+                  <slot
+                    :name="`${cell.column.id}-data`"
+                    v-bind="{ row: row.original }"
+                  >
+                    <FlexRender
+                      :render="cell.column.columnDef.cell"
+                      :props="cell.getContext()"
+                    />
+                  </slot>
+                </template>
               </TableCell>
             </TableRow>
           </template>
 
           <TableRow v-else>
-            <TableCell :colspan="props.columns.length" class="h-24 text-center">
-              No results.
-            </TableCell>
+            <slot name="empty">
+              <TableCell
+                :colspan="props.columns.length"
+                class="h-24 text-center"
+              >
+                No results.
+              </TableCell>
+            </slot>
           </TableRow>
         </TableBody>
       </Table>

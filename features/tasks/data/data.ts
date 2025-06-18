@@ -17,27 +17,27 @@ export const statuses = [
   {
     value: "backlog",
     label: "Backlog",
-    icon: null,
+    icon: "hugeicons:help-circle",
   },
   {
     value: "todo",
     label: "Todo",
-    icon: null,
+    icon: "hugeicons:circle",
   },
   {
     value: "in progress",
     label: "In Progress",
-    icon: null,
+    icon: "hugeicons:stop-watch",
   },
   {
     value: "done",
     label: "Done",
-    icon: null,
+    icon: "hugeicons:checkmark-circle-01",
   },
   {
     value: "canceled",
     label: "Canceled",
-    icon: null,
+    icon: "hugeicons:cancel-circle",
   },
 ];
 
@@ -45,16 +45,16 @@ export const priorities = [
   {
     value: "low",
     label: "Low",
-    icon: null,
+    icon: "hugeicons:arrow-down-02",
   },
   {
     value: "medium",
     label: "Medium",
-    icon: null,
+    icon: "hugeicons:arrow-right-02",
   },
   {
     value: "high",
     label: "High",
-    icon: null,
+    icon: "hugeicons:arrow-up-02",
   },
 ];
