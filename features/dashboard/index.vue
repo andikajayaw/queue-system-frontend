@@ -13,25 +13,37 @@ const fetchDashboardData = async () => {
     // const config = useRuntimeConfig();
 
     // Fetch current serving, next queue, and stats
-    const [serving, stats] = await Promise.all([
-      useCommon('/call/current'),
+    const [stats] = await Promise.all([
+      // useCommon('/call/current'),
       useCommon('/queue/dashboard-stats'),
       // useCommon('/display/next-waiting?limit=3'),
     ]);
-    console.log(serving, stats)
-    currentServing.value = serving.data.value.data;
+    // currentServing.value = serving.data.value.data;
     dashboardStats.value = stats.data.value.data;
     // nextQueue.value = next;
   } catch (error) {
     console.error('Error fetching dashboard data:', error);
   }
 };
+
+const openDisplayQueue = () => {
+  window.open('/display-queue', '_blank');
+};
 </script>
 
 <template>
   <DashboardContent>
     <template #header>
-      <h2 class="text-2xl font-bold tracking-tight">Dashboard (Hari ini)</h2>
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold tracking-tight">Dashboard (Hari ini)</h2>
+        <button @click="openDisplayQueue"
+          class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+          Tampilkan Layar Pengambilan Nomor
+        </button>
+      </div>
     </template>
     <Tabs default-value="overview" class="space-y-4">
       <TabsContent value="overview" class="space-y-4">

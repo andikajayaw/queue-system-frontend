@@ -1,6 +1,7 @@
 export const useLogin = async (username: string, password: string) => {
   const { data, error } = await useFetch('http://localhost:3001/api/auth/login', {
     method: 'POST',
+    credentials: "include", // penting
     body: { username, password },
   })
 

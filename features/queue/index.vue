@@ -54,9 +54,9 @@ const selectedCurrentQueue = ref<any>(null)
 // }
 
 async function callNextQueue() {
-    // console.log()
-    if (displayStore.currentCalled.length > 0) {
-        selectedCurrentQueue.value = displayStore.currentCalled[0]; // Ambil yang aktif
+    console.log(displayStore.currentCalled)
+    if (filteredCurrentCalled.value.length > 0) {
+        selectedCurrentQueue.value = filteredCurrentCalled.value[0]; // Ambil yang aktif
         showConfirmModal.value = true; // Tampilkan modal konfirmasi
         return;
     }
@@ -187,8 +187,9 @@ const filteredRecentCompleted = computed(() => {
 <template>
     <DashboardContent>
         <div class="flex gap-4 mt-4">
-            <Button class="bg-blue-600 text-white hover:bg-blue-700" @click="callNextQueue">
-                Antrian Selanjutnya
+            <Button class="bg-blue-600 text-white hover:bg-blue-700" :disabled="displayStore.nextWaiting.length === 0"
+                @click="callNextQueue">
+                Panggil Antrian Berikutnya
             </Button>
         </div>
         <!-- {{ displayStore }} -->

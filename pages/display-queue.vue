@@ -81,12 +81,14 @@ async function createQueue() {
         body: payload,
     })
 
-    if (error) {
+    console.log(data, error)
+
+    if (error.data?.value) {
         console.error('Gagal membuat antrian', error.value)
         toast.success(`Gagal membuat antrian!`);
         return
     } else {
-        queueNumber.value = data?.queueNumber || 'Tidak diketahui'
+        queueNumber.value = data.value?.data.queueNumber || 'Tidak diketahui'
         toast.success(`🎉 Antrian Berhasil Dibuat!`,
             {
                 description: `Nomor Antrian Anda: ${queueNumber.value}`,
@@ -94,6 +96,8 @@ async function createQueue() {
             });
         name.value = ''
         phone.value = ''
+
+        console.log(displayStore)
     }
 
     isSubmitting.value = false;

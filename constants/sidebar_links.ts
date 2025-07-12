@@ -27,7 +27,7 @@ const sidebar_groups: SidebarGroup[] = [
         icon: "hugeicons:dashboard-square-01",
       },
       {
-        title: "Queue",
+        title: "Antrian",
         url: "/queue",
         icon: "hugeicons:package",
       },

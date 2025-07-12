@@ -5,16 +5,21 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   const tryRefreshToken = async (): Promise<boolean> => {
     try {
-      const { data, error } = await useCommon("/auth/refresh-token", {
-        method: "POST",
-        credentials: "include",
-      });
+      const { data, error } = await useCommon(
+        "/auth/refresh-token",
+        {
+          method: "POST",
+          credentials: "include",
+        },
+        false
+      );
 
       if (error.value || !data.value) return false;
-
+      console.log("tryRefreshToken", data);
       token.value.accessToken = data.value;
       return true;
-    } catch {
+    } catch (err) {
+      console.log(err);
       return false;
     }
   };
@@ -30,22 +35,21 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   // Jika token ada tapi expired
+  console.log(isTokenExpired(token.value.accessToken));
   if (isTokenExpired(token.value.accessToken)) {
     const refreshed = await tryRefreshToken();
     if (!refreshed) {
-      token.value.accessToken = null;
+      token.value = null;
       return navigateTo("/sign-in");
     }
   }
 
   // Cek profile
-  if(token?.value) {
-    console.log(token.value)
+  if (token?.value) {
     const { error } = await useCommon("/auth/profile", {
       method: "GET",
       credentials: "include",
     });
-    console.log('cek proflie', error)
     if (error.value) {
       token.value.accessToken = null;
       return navigateTo("/sign-in");
