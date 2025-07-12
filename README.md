@@ -1,58 +1,39 @@
-# Nuxt Admin Dashboard
+# 🧑‍💻 Queue System Frontend Nuxt
 
-A modern and responsive Admin Dashboard UI built with **Nuxt 3**, **shadcn-vue**, and **Tailwind CSS v4**.
+Project ini menggunakan Nuxt 3 dengan berbagai library modern seperti Tailwind CSS, Pinia, vee-validate, dan WebSocket client.
 
-<!-- ![Screenshot](./public/preview.png)  -->
+## 📦 Tech Stack
 
-## ✨ Features
+- **Nuxt 3**
+- **Tailwind CSS**
+- **Pinia**
+- **vee-validate + zod**
+- **VueUse**
+- **shadcn-nuxt**
+- **Socket.IO client**
+- **Lucide icons**
 
-- ✅ Built with **Nuxt 3** and **TypeScript**
-- 🎨 UI components from **shadcn-vue**
-- 🌗 Light/Dark mode toggle
-- ⚡ Fast and responsive design
-- 🔍 Global search command
-- 🧩 Sidebar navigation layout
-- 📄 Pre-built pages and reusable components
-- 💅 Tailwind CSS + Radix UI integration
+## 📝 Prasyarat
 
-## 🛠️ Tech Stack
+Pastikan sudah menginstal:
 
-- **Framework:** Nuxt 3
-- **UI Library:** shadcn-vue (TailwindCSS + Radix Vue)
-- **Icons:** hugeicons and tabler
-- **Type Checking:** TypeScript
-- **Linting/Formatting:** ESLint & Prettier
+- Node.js v18 atau lebih baru
+- pnpm (opsional, bisa pakai npm/yarn juga)
 
-## 🚀 Getting Started
-
-Clone the repository
+## 🚀 Instalasi
 
 ```bash
-git clone https://github.com/Miguel-Domingos/shadcn-dashboard.git
+# Clone repository
+git clone https://github.com/your-username/queue-system-frontend-nuxt.git
+cd queue-system-frontend-nuxt
+
+# Buat file .env
+cp .env.example .env
 ```
 
-Navigate to the project directory
+Sebagian desain UI dan inspirasi dashboard pada proyek ini menggunakan base dari:
 
-```bash
-cd shadcn-dashboard
-```
+Miguel Domingos
+🔗 GitHub: https://github.com/Miguel-Domingos
 
-Install dependencies
-
-```bash
-npm install
-```
-
-Run the development server
-
-```bash
-npm run dev
-```
-
-# Author
-
-Crafted with ❤️ by [@Miguel-Domingos](https://github.com/Miguel-Domingos)
-
-# License
-
-Licensed under the [MIT License](https://choosealicense.com/licenses/mit/)
+Terima kasih atas kontribusinya pada komunitas open source 🙌

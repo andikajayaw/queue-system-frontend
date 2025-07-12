@@ -18,10 +18,10 @@ const open = ref(false);
         class="mr-2 data-[orientation=vertical]:h-4"
       />
       <div class="w-full flex items-center gap-4 justify-between">
-        <SearchCommand :open :page-links="sidebar_groups" />
+        <!-- <SearchCommand :open :page-links="sidebar_groups" /> -->
         <div class="flex items-center gap-4">
           <ThemeToggle />
-          <UserNav />
+          <!-- <UserNav /> -->
         </div>
       </div>
     </div>

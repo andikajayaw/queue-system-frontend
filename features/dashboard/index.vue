@@ -1,121 +1,87 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// Reactive data
+const currentServing: any = ref(null);
+const dashboardStats: any = ref([]);
+
+onMounted(() => {
+  // Fetch initial data
+  fetchDashboardData();
+});
+
+const fetchDashboardData = async () => {
+  try {
+    // const config = useRuntimeConfig();
+
+    // Fetch current serving, next queue, and stats
+    const [serving, stats] = await Promise.all([
+      useCommon('/call/current'),
+      useCommon('/queue/dashboard-stats'),
+      // useCommon('/display/next-waiting?limit=3'),
+    ]);
+    console.log(serving, stats)
+    currentServing.value = serving.data.value.data;
+    dashboardStats.value = stats.data.value.data;
+    // nextQueue.value = next;
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error);
+  }
+};
+</script>
 
 <template>
   <DashboardContent>
     <template #header>
-      <h2 class="text-2xl font-bold tracking-tight">Dashboard</h2>
+      <h2 class="text-2xl font-bold tracking-tight">Dashboard (Hari ini)</h2>
     </template>
-
     <Tabs default-value="overview" class="space-y-4">
-      <TabsList>
-        <TabsTrigger value="overview"> Overview </TabsTrigger>
-        <TabsTrigger value="analytics" disabled> Analytics </TabsTrigger>
-        <TabsTrigger value="reports" disabled> Reports </TabsTrigger>
-        <TabsTrigger value="notifications" disabled>
-          Notifications
-        </TabsTrigger>
-      </TabsList>
       <TabsContent value="overview" class="space-y-4">
-        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
           <Card>
-            <CardHeader
-              class="flex flex-row items-center justify-between space-y-0 pb-2"
-            >
-              <CardTitle class="text-sm font-medium"> Total Revenue </CardTitle>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                class="h-4 w-4 text-muted-foreground"
-              >
-                <path
-                  d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"
-                />
-              </svg>
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle class="text-sm font-medium"> Jumlah Aktif Antrian (Menunggu) </CardTitle>
+              <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" class="h-4 w-4 text-muted-foreground">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg> -->
             </CardHeader>
             <CardContent>
-              <div class="text-2xl font-bold">$45,231.89</div>
-              <p class="text-xs text-muted-foreground">
-                +20.1% from last month
-              </p>
+              <div class="text-2xl font-bold">{{ dashboardStats.activeQueues }}</div>
             </CardContent>
           </Card>
           <Card>
-            <CardHeader
-              class="flex flex-row items-center justify-between space-y-0 pb-2"
-            >
-              <CardTitle class="text-sm font-medium"> Subscriptions </CardTitle>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                class="h-4 w-4 text-muted-foreground"
-              >
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle class="text-sm font-medium"> Jumlah staff yang tersedia/aktif </CardTitle>
             </CardHeader>
             <CardContent>
-              <div class="text-2xl font-bold">+2350</div>
-              <p class="text-xs text-muted-foreground">
-                +180.1% from last month
-              </p>
+              <div class="text-2xl font-bold">{{ dashboardStats.activeStaff }}</div>
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader
-              class="flex flex-row items-center justify-between space-y-0 pb-2"
-            >
-              <CardTitle class="text-sm font-medium"> Sales </CardTitle>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                class="h-4 w-4 text-muted-foreground"
-              >
-                <rect width="20" height="14" x="2" y="5" rx="2" />
-                <path d="M2 10h20" />
-              </svg>
+        </div>
+        <div class="text-2xl font-bold">Top 3 Staff (Hari ini)</div>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Card v-for="topStaff in dashboardStats.topStaff">
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle class="text-sm font-medium">{{ topStaff.name }}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div class="text-2xl font-bold">+12,234</div>
-              <p class="text-xs text-muted-foreground">+19% from last month</p>
+              <div class="text-2xl font-bold">{{ topStaff.totalServed }}</div>
+              <p>Total served</p>
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader
-              class="flex flex-row items-center justify-between space-y-0 pb-2"
-            >
-              <CardTitle class="text-sm font-medium"> Active Now </CardTitle>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                class="h-4 w-4 text-muted-foreground"
-              >
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-              </svg>
+        </div>
+        <div class="text-2xl font-bold">Statistik Pelayanan (Hari ini)</div>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <Card v-for="statsStaff in dashboardStats.staffServiceStats">
+            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle class="text-sm font-medium">{{ statsStaff.staff.name }}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div class="text-2xl font-bold">+573</div>
-              <p class="text-xs text-muted-foreground">+201 since last hour</p>
+              <div class="grid gap-2">
+                <div class="text-2xl font-bold">{{ statsStaff.averageServiceTime }}</div>
+                <p>Waktu pelayanan (average)</p>
+                <div class="text-2xl font-bold">{{ statsStaff.totalServed }}</div>
+                <p>Total served</p>
+              </div>
             </CardContent>
           </Card>
         </div>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useColorMode } from "@vueuse/core";
+import { Toaster } from 'vue-sonner'
 
 const { state } = useColorMode();
 
@@ -14,5 +15,6 @@ const loadingColor = computed(() =>
   </ClientOnly>
   <NuxtLayout>
     <NuxtPage />
+    <Toaster position="top-right" rich-colors />
   </NuxtLayout>
 </template>
