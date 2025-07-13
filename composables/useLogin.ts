@@ -4,6 +4,7 @@ export const useLogin = async (username: string, password: string) => {
     credentials: 'include',
     body: { username, password },
   });
+  console.log(data.value, error.value)
 
   if (error.value) {
     throw new Error(error.value.data?.message || 'Login gagal');

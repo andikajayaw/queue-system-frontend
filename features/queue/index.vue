@@ -126,8 +126,8 @@ const fetchQueueData = async () => {
 
 async function proceedToNextQueue() {
     try {
-        const token = useCookie('token')?.value.user;
-        const { id } = token;
+        const user = useCookie('user');
+        const { id } = user;
 
         const response = await useCommon('/call/next', {
             method: 'POST',
@@ -173,13 +173,13 @@ async function handleCancelAndNext() {
 //     // Fetch initial data
 //     fetchQueueData();
 // });
-const staffId = useCookie('token')?.value?.user?.id;
+const staffId = useCookie('user')?.value?.id;
 // console.log(staffId);
 const filteredCurrentCalled = computed(() => {
-    return displayStore.currentCalled.filter(item => item.staff.id === staffId);
+    return displayStore.currentCalled.filter(item => item.staff?.id === staffId);
 });
 const filteredRecentCompleted = computed(() => {
-    return displayStore.recentCompleted.filter(item => item.staff.id === staffId);
+    return displayStore.recentCompleted.filter(item => item.staff?.id === staffId);
 });
 
 </script>
