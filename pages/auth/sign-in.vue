@@ -30,9 +30,9 @@ const handleLogin = async () => {
   <div class="flex h-screen w-full items-center justify-center px-4">
     <Card class="w-full mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle class="text-2xl">Queue System - Login</CardTitle>
+        <CardTitle class="text-2xl">Sistem Antrian - Login</CardTitle>
         <CardDescription>
-          Enter your username below to login to your account
+          Masukkan username dan password dibawah untuk masuk ke akunmu.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -53,10 +53,10 @@ const handleLogin = async () => {
           <Button type="submit" class="w-full" @click="handleLogin"> Login </Button>
           <!-- <Button variant="outline" class="w-full"> Login with Google </Button> -->
         </div>
-        <!-- <div class="mt-4 text-center text-sm">
-          Don't have an account?
-          <NuxtLink to="#" class="underline"> Sign up </NuxtLink>
-        </div> -->
+        <div class="mt-4 text-center text-sm" >
+          Tidak punya akun?
+          <NuxtLink to="/sign-up" class="underline">Daftar Disini</NuxtLink>
+        </div>
       </CardContent>
     </Card>
   </div>
