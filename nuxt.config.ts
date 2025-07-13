@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
   ],
   // Plugin untuk WebSocket
-  plugins: ["~/plugins/socket.client.ts", "~/plugins/auth-token.ts"],
+  plugins: ["~/plugins/socket.client.ts"],
   // Runtime config untuk WebSocket endpoints
   runtimeConfig: {
     public: {

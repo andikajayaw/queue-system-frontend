@@ -1,7 +1,9 @@
 import { isTokenExpired } from "~/utils/jwt";
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const token = useCookie("token");
+  const accessToken = useCookie("access_token");
+  const refreshToken = useCookie("refresh_token");
+  const user = useCookie("user");
 
   const tryRefreshToken = async (): Promise<boolean> => {
     try {
@@ -11,50 +13,52 @@ export default defineNuxtRouteMiddleware(async (to) => {
           method: "POST",
           credentials: "include",
         },
-        false
+        false // karena belum bisa kirim access token (expired)
       );
 
       if (error.value || !data.value) return false;
-      console.log("tryRefreshToken", data);
-      token.value.accessToken = data.value;
+
+      // Update access_token & refresh_token dari response
+      accessToken.value = data.value.accessToken;
+      refreshToken.value = data.value.refresh_token;
+
       return true;
     } catch (err) {
-      console.log(err);
+      console.log("tryRefreshToken error", err);
       return false;
     }
   };
 
-  // Bypass untuk public page
   const publicPages = ["/sign-in", "/display-queue"];
   if (publicPages.includes(to.path)) return;
 
-  // Jika tidak punya token, coba refresh
-  if (!token.value) {
-    const refreshed = await tryRefreshToken();
-    if (!refreshed) return navigateTo("/sign-in");
-  }
-
-  // Jika token ada tapi expired
-  console.log(isTokenExpired(token.value.accessToken));
-  if (isTokenExpired(token.value.accessToken)) {
+  if (!accessToken.value || isTokenExpired(accessToken.value)) {
     const refreshed = await tryRefreshToken();
     if (!refreshed) {
-      token.value = null;
+      accessToken.value = null;
+      refreshToken.value = null;
+      user.value = null;
       return navigateTo("/sign-in");
     }
   }
 
-  // Cek profile
-  if (token?.value) {
+  // Cek profile jika masih ada token
+  if (accessToken.value) {
     const { error } = await useCommon("/auth/profile", {
       method: "GET",
       credentials: "include",
     });
+
     if (error.value) {
-      token.value.accessToken = null;
+      accessToken.value = null;
+      refreshToken.value = null;
+      user.value = null;
       return navigateTo("/sign-in");
     }
   }
 
-  if (to.path === "/sign-in") return navigateTo("/");
+  // Cegah akses ke /sign-in jika sudah login
+  if (to.path === "/sign-in" && accessToken.value) {
+    return navigateTo("/");
+  }
 });

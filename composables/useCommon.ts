@@ -1,16 +1,21 @@
-export const useCommon = async <T = any>(path: string, options = {}, withAuth: boolean = true) => {
-  const token = useCookie("token");
+export const useCommon = async <T = any>(
+  path: string,
+  options: any = {},
+  withAuth: boolean = true
+) => {
   const config = useRuntimeConfig();
+  const accessToken = useCookie<string>("access_token");
 
   const headers = {
     ...(options.headers || {}),
-    ...(withAuth && token.value?.accessToken
-      ? { Authorization: `Bearer ${token.value.accessToken}` }
+    ...(withAuth && accessToken.value
+      ? { Authorization: `Bearer ${accessToken.value}` }
       : {}),
   };
 
   return await useFetch<T>(`${config.public.apiUrl}${path}`, {
     ...options,
     headers,
+    credentials: "include", // penting agar kirim cookie
   });
 };

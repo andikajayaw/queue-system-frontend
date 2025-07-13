@@ -48,21 +48,20 @@ const { isMobile, state, toggleSidebar } = useSidebar();
 async function signOut() {
   // await useLogin(username.value, password.value)
   try {
-    // const config = useRuntimeConfig();
+    await useCommon('/auth/logout', {
+      method: "POST",
+      credentials: "include", // pastikan refresh_token juga terkirim
+    });
 
-    // Fetch current serving, next queue, and stats
-    const [dataLogout] = await Promise.all([
-      useCommon('/auth/logout', {
-        method: "POST",
-      }),
-    ]);
-    console.log(dataLogout)
-    const cookie = useCookie('token')
-    cookie.value = null
-    router.push('sign-in')
-    // nextQueue.value = next;
+    // Hapus semua cookie terkait autentikasi
+    useCookie('access_token').value = null;
+    useCookie('refresh_token').value = null;
+    useCookie('user').value = null;
+    useCookie('token').value = null; // jika masih ada sisa dari implementasi lama
+
+    router.push('/sign-in');
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
+    console.error('Error saat logout:', error);
   }
 
 }
@@ -167,7 +166,7 @@ async function signOut() {
                   <div class="grid flex-1 text-left text-sm leading-tight">
                     <span class="truncate font-medium">{{
                       data.user.name
-                      }}</span>
+                    }}</span>
                     <span class="truncate text-xs">{{ data.user.email }}</span>
                   </div>
                   <ChevronsUpDown class="ml-auto size-4" />
@@ -184,10 +183,10 @@ async function signOut() {
                     <div class="grid flex-1 text-left text-sm leading-tight">
                       <span class="truncate font-semibold">{{
                         data.user.name
-                        }}</span>
+                      }}</span>
                       <span class="truncate text-xs">{{
                         data.user.email
-                        }}</span>
+                      }}</span>
                     </div>
                   </div>
                 </DropdownMenuLabel>

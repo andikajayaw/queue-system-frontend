@@ -29,11 +29,13 @@ const fetchDashboardData = async () => {
 const openDisplayQueue = () => {
   window.open('/display-queue', '_blank');
 };
+
 </script>
 
 <template>
   <DashboardContent>
     <template #header>
+      {{ user }}
       <div class="flex justify-between items-center">
         <h2 class="text-2xl font-bold tracking-tight">Dashboard (Hari ini)</h2>
         <button @click="openDisplayQueue"

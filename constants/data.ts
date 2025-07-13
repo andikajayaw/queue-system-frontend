@@ -1,10 +1,10 @@
-const token = useCookie("token");
+const user = useCookie("user");
 
 const data = {
   user: {
-    name: token.value?.user?.name,
-    email: token.value?.user?.email,
-    username: token.value?.user?.username,
+    name: user.value?.name,
+    email: user.value?.email,
+    username: user.value?.username,
     avatar: "/avatar.jpeg",
   },
 };
