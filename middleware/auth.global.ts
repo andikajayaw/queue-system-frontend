@@ -32,15 +32,16 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const publicPages = ["/sign-in", "/display-queue"];
   if (publicPages.includes(to.path)) return;
 
-  if (!accessToken.value || isTokenExpired(accessToken.value)) {
-    const refreshed = await tryRefreshToken();
-    if (!refreshed) {
-      accessToken.value = null;
-      refreshToken.value = null;
-      user.value = null;
-      return navigateTo("/sign-in");
-    }
-  }
+  // still working with refresh-token
+  // if (!accessToken.value || isTokenExpired(accessToken.value)) {
+  //   const refreshed = await tryRefreshToken();
+  //   if (!refreshed) {
+  //     accessToken.value = null;
+  //     refreshToken.value = null;
+  //     user.value = null;
+  //     return navigateTo("/sign-in");
+  //   }
+  // }
 
   // Cek profile jika masih ada token
   if (accessToken.value) {

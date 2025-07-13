@@ -69,11 +69,8 @@ async function createQueue() {
             return;
         }
 
-        payload.name = name.value.trim();
-        payload.phone = phone.value.trim();
-
-        payload.name = name.value
-        payload.phone = phone.value
+        payload.customerName = name.value.trim();
+        payload.phoneNumber = phone.value.trim();
     }
 
     const { data, error } = await useCommon('/queue', {
@@ -81,7 +78,7 @@ async function createQueue() {
         body: payload,
     })
 
-    console.log(data, error)
+    console.log(data.value, error.value)
 
     if (error.data?.value) {
         console.error('Gagal membuat antrian', error.value)
