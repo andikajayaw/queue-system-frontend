@@ -128,7 +128,6 @@ onMounted(() => {
 <template>
     <DashboardContent>
         <!-- <Button @click="speak('Suara aktif')">Aktifkan Suara</Button> -->
-
         <div class="text-2xl font-bold">Ambil Nomor Antrian</div>
         <Card class="w-full max-w-md space-y-4">
             <CardHeader>
@@ -179,7 +178,7 @@ onMounted(() => {
                 </CardHeader>
                 <CardContent>
                     <div class="text-2xl font-bold">{{ item.queueNumber }}</div>
-                    <div class="text-lg font-semibold">{{ item.staff.name }}</div>
+                    <div class="text-lg font-semibold">{{ item }}</div>
                 </CardContent>
             </Card>
         </div>

@@ -44,19 +44,19 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // }
 
   // Cek profile jika masih ada token
-  // if (accessToken.value) {
-  //   const { error } = await useCommon("/auth/profile", {
-  //     method: "GET",
-  //     credentials: "include",
-  //   });
+  if (accessToken.value) {
+    const { error } = await useCommon("/auth/profile", {
+      method: "GET",
+      credentials: "include",
+    });
 
-  //   if (error.value) {
-  //     accessToken.value = null;
-  //     refreshToken.value = null;
-  //     user.value = null;
-  //     return navigateTo("/sign-in");
-  //   }
-  // }
+    if (error.value) {
+      accessToken.value = null;
+      refreshToken.value = null;
+      user.value = null;
+      return navigateTo("/sign-in");
+    }
+  }
 
   // Cegah akses ke /sign-in jika sudah login
   if (to.path === "/sign-in" && accessToken.value) {

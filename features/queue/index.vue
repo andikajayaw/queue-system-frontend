@@ -54,7 +54,7 @@ const selectedCurrentQueue = ref<any>(null)
 // }
 
 async function callNextQueue() {
-    console.log(displayStore.currentCalled)
+    // console.log(displayStore.currentCalled)
     if (filteredCurrentCalled.value.length > 0) {
         selectedCurrentQueue.value = filteredCurrentCalled.value[0]; // Ambil yang aktif
         showConfirmModal.value = true; // Tampilkan modal konfirmasi
@@ -127,8 +127,7 @@ const fetchQueueData = async () => {
 async function proceedToNextQueue() {
     try {
         const user = useCookie('user');
-        const { id } = user;
-
+        const { id } = user.value;
         const response = await useCommon('/call/next', {
             method: 'POST',
             body: { staffId: id },
@@ -176,10 +175,10 @@ async function handleCancelAndNext() {
 const staffId = useCookie('user')?.value?.id;
 // console.log(staffId);
 const filteredCurrentCalled = computed(() => {
-    return displayStore.currentCalled.filter(item => item.staff?.id === staffId);
+    return displayStore.currentCalled.filter(item => item?.staff?.id === staffId);
 });
 const filteredRecentCompleted = computed(() => {
-    return displayStore.recentCompleted.filter(item => item.staff?.id === staffId);
+    return displayStore.recentCompleted.filter(item => item?.staff?.id === staffId);
 });
 
 </script>
